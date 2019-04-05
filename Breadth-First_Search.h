@@ -2,10 +2,13 @@
 #define BFSEARCH_H
 class bfSearch{
     private:
-        pair<string, int> *pArr;
-        int pArrSize;
+        int bfArrX;
+        int bfArrY;
+        int **bfArr;
+        int start;
+        int end;
     public:
-        bfSearch(pair<string, int> *pArr, int pArrSize);
+        bfSearch(int bfArrX, int bfArrY, int **bfArr, int start, int end);
         ~bfSearch();
         string searching();
 };

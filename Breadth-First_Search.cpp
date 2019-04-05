@@ -1,17 +1,17 @@
 #include <string> //for string
-#include <utility> //for pair
 #include <stack> //for stack
 using namespace std;
 
 #include "Breadth-First_Search.h"
 
-bfSearch::bfSearch(pair<string, int> *pArr, int pArrSize){
-    this->pArr = pArr;
-    this->pArrSize = pArrSize;
+bfSearch::bfSearch(int bfArrX, int bfArrY, int **bfArr, int start, int end){
+    this->bfArrX = bfArrX;
+    this->bfArrY = bfArrY;
+    this->bfArr = bfArr;
+    this->start = start;
+    this->end = end;
 }
 
 bfSearch::~bfSearch(){}
 
-string bfSearch::searching(){
-    return pArr[pArrSize-1].first;
-}
+string bfSearch::searching(){}
