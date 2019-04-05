@@ -1,11 +1,12 @@
-#ifndef bfSearch_H
-#define bfSearch_H
+#ifndef BFSEARCH_H
+#define BFSEARCH_H
 class bfSearch{
     private:
-        
+        pair<string, int> *pArr;
+        int pArrSize;
     public:
-        bfSearch(); //생성자
-        ~bfSearch(); //소멸자
+        bfSearch(pair<string, int> *pArr, int pArrSize);
+        ~bfSearch();
         string searching();
 };
 #endif
