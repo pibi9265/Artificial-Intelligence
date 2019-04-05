@@ -1,8 +1,10 @@
 #include <iostream>
-
 using namespace std;
 
+#include "Breadth-First_Search.h"
+
 int main(){
-    cout << "Hello World!!" << endl;
+    bfSearch bf;
+    cout << bf.searching() << endl;
     return 0;
 }

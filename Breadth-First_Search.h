@@ -2,10 +2,10 @@
 #define bfSearch_H
 class bfSearch{
     private:
-        int i;
+        
     public:
-        bfSearch();
-        ~bfSearch();
-        serching();
+        bfSearch(); //생성자
+        ~bfSearch(); //소멸자
+        string searching();
 };
 #endif
