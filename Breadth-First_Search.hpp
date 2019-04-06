@@ -1,7 +1,25 @@
+#ifndef BFSEARCH_H
+#define BFSEARCH_H
+
 #include <string>
+#include <queue>
+#include <stack>
 using namespace std;
 
-#include "Breadth-First_Search.h"
+class bfSearch{
+    private:
+        int bfArrX;
+        int bfArrY;
+        int **bfArr;
+        int start;
+        int end;
+        queue<int> open;
+        stack<int> closed;
+    public:
+        bfSearch(int bfArrX, int bfArrY, int **bfArr, int start, int end);
+        ~bfSearch();
+        string searching();
+};
 
 bfSearch::bfSearch(int bfArrX, int bfArrY, int **bfArr, int start, int end){
     this->bfArrX = bfArrX;
@@ -26,3 +44,5 @@ string bfSearch::searching(){
     }
     return result;
 }
+
+#endif

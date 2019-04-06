@@ -1,7 +1,8 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
-#include "Breadth-First_Search.h"
+#include "Breadth-First_Search.hpp"
 
 int main(){
     int bfArrX = 20;
@@ -19,7 +20,3 @@ int main(){
 
     return 0;
 }
-
-
-//bfSearch클래스의 searching부분 완성해야됨
-//open이랑 closed를 각각 큐랑 스택으로 구현하는거 까지 함
