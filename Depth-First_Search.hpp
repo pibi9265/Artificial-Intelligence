@@ -13,7 +13,8 @@ class dfSearch{
         int start;
         int end;
         stack<queue<int>> open;
-        int *closed;
+        queue<int> closed;
+        bool checkClosed(int n);
     public:
         dfSearch(int dfArrSize, int **dfArr, int start, int end);
         ~dfSearch();
@@ -25,15 +26,9 @@ dfSearch::dfSearch(int dfArrSize, int **dfArr, int start, int end){
     this->dfArr = dfArr;
     this->start = start;
     this->end = end;
-    closed = new int[dfArrSize];
-    for(int i = 0;i < dfArrSize;i++){
-        closed[i] = 0;
-    }
 }
 
-dfSearch::~dfSearch(){
-    delete[] closed;
-}
+dfSearch::~dfSearch(){}
 
 string dfSearch::searching(){
     string result;
@@ -45,7 +40,7 @@ string dfSearch::searching(){
             return result;
         }
         else if(open.top().back()==end){
-            result = "Start: ";
+            result = "Success: ";
             while(true){
                 result += to_string(open.top().front());
                 open.top().pop();
@@ -59,15 +54,28 @@ string dfSearch::searching(){
         else{
             queue<int> tmp = open.top();
             open.pop();
-            closed[tmp.back()] = 1;
-            for(int i = 0;i < dfArrSize;i++){
-                if(dfArr[tmp.back()][i]!=0&&closed[i]==0){
+            closed.push(tmp.back());
+            for(int i = dfArrSize - 1;i >= 0;i--){
+                if(dfArr[tmp.back()][i]!=0&&!checkClosed(i)){
                     open.push(tmp);
                     open.top().push(i);
                 }
             }
         }
     }
+}
+
+bool dfSearch::checkClosed(int n){
+    queue<int> tmp = closed;
+    while(!tmp.empty()){
+        if(tmp.front() == n){
+            return true;
+        }
+        else{
+            tmp.pop();
+        }
+    }
+    return false;
 }
 
 #endif

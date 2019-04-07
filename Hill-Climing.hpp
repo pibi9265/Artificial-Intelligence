@@ -1,35 +1,38 @@
-#ifndef BFSEARCH_H
-#define BFSEARCH_H
+#ifndef HCLIM_H
+#define HCLIM_H
 
 #include <string>
 #include <queue>
 using namespace std;
 
-class bfSearch{
+class hClim{
     private:
-        int bfArrSize;
-        int **bfArr;
+        int hClimArrSize;
+        int **hClimArr;
         int start;
         int end;
         queue<queue<int>> open;
         queue<int> closed;
         bool checkClosed(int n);
+        int *hArr;
+        bool heuristics();
     public:
-        bfSearch(int bfArrSize, int **bfArr, int start, int end);
-        ~bfSearch();
+        hClim(int hClimArrSize, int **hClimArr, int start, int end, int *hArr);
+        ~hClim();
         string searching();
 };
 
-bfSearch::bfSearch(int bfArrSize, int **bfArr, int start, int end){
-    this->bfArrSize = bfArrSize;
-    this->bfArr = bfArr;
+hClim::hClim(int hClimArrSize, int **hClimArr, int start, int end, int *hArr){
+    this->hClimArrSize = hClimArrSize;
+    this->hClimArr = hClimArr;
     this->start = start;
     this->end = end;
+    this->hArr = hArr;
 }
 
-bfSearch::~bfSearch(){}
+hClim::~hClim(){}
 
-string bfSearch::searching(){
+string hClim::searching(){
     string result;
     open.push(queue<int>());
     open.front().push(start);
@@ -54,8 +57,8 @@ string bfSearch::searching(){
             queue<int> tmp = open.front();
             open.pop();
             closed.push(tmp.back());
-            for(int i = 0;i < bfArrSize;i++){
-                if(bfArr[tmp.back()][i]!=0&&!checkClosed(i)){
+            for(int i = 0;i < hClimArrSize;i++){
+                if(hClimArr[tmp.back()][i]!=0&&!checkClosed(i)){
                     open.push(tmp);
                     open.back().push(i);
                 }
@@ -64,7 +67,7 @@ string bfSearch::searching(){
     }
 }
 
-bool bfSearch::checkClosed(int n){
+bool hClim::checkClosed(int n){
     queue<int> tmp = closed;
     while(!tmp.empty()){
         if(tmp.front() == n){
@@ -76,5 +79,7 @@ bool bfSearch::checkClosed(int n){
     }
     return false;
 }
+
+bool heuristics(){}
 
 #endif
