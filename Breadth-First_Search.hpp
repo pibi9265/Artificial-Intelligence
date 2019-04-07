@@ -39,27 +39,32 @@ string bfSearch::searching(){
     open.push(queue<int>());
     open.front().push(start);
     while(true){
-        if(open.front().back()==end){
+        if(open.empty()){
+            result = "Fail";
+            return result;
+        }
+        else if(open.front().back()==end){
+            result = "Start: ";
             while(true){
                 result += to_string(open.front().front());
                 open.front().pop();
                 if(open.front().empty()){
-                    break;
+                    return result;
                 }else{
-                    result += "->";
+                    result += " -> ";
                 }
             }
-            return result;
         }
         else{
+            queue<int> tmp = open.front();
+            open.pop();
+            closed[tmp.back()] = 1;
             for(int i = 0;i < bfArrSize;i++){
-                if(bfArr[open.front().back()][i]!=0&&closed[i]==0){
-                    open.push(open.front());
+                if(bfArr[tmp.back()][i]!=0&&closed[i]==0){
+                    open.push(tmp);
                     open.back().push(i);
                 }
             }
-            closed[open.front().back()] = 1;
-            open.pop();
         }
     }
 }

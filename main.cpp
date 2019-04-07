@@ -3,6 +3,7 @@
 using namespace std;
 
 #include "Breadth-First_Search.hpp"
+#include "Depth-First_Search.hpp"
 
 int main(){
     int bfArrSize = 5;
@@ -29,15 +30,15 @@ int main(){
     int start = 0;
     int end = 2;
 
-    bfSearch *bf = new bfSearch(bfArrSize, bfArr, start, end);
-    cout << bf->searching() << endl;
+    bfSearch bf(bfArrSize, bfArr, start, end);
+    cout << bf.searching() << endl;
+    dfSearch df(bfArrSize, bfArr, start, end);
+    cout << df.searching() << endl;
 
     for(int i = 0;i < bfArrSize;i++){
         delete[] bfArr[i];
     }
     delete[] bfArr;
-
-    delete bf;
 
     return 0;
 }
