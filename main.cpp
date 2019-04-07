@@ -28,7 +28,10 @@ int main(){
     int start = 0;
     int end = 2;
 
-    int *hArr;
+    int *hArr = new int [arrSize];
+    for(int i = 0;i < arrSize;i++){
+        hArr[i] = 0;
+    }
 
     bfSearch bf(arrSize, arr, start, end);
     cout << bf.searching() << endl;
