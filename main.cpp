@@ -42,5 +42,7 @@ int main(){
     }
     delete[] arr;
 
+    delete[] hArr;
+
     return 0;
 }
