@@ -7,59 +7,55 @@ using namespace std;
 
 class hClim{
     private:
-        int hClimArrSize;
-        int **hClimArr;
+        int arrSize;
+        int **arr;
         int start;
         int end;
         queue<queue<int>> open;
-        queue<int> closed;
-        bool checkClosed(int n);
-        int *hArr;
-        bool heuristics();
+        queue<queue<int>> closed;
+        queue<int> path;
+        bool reVisit(int n);
+        int cost(queue<int> q);
+        string qtos(queue<int> q);
+        void resetQueue(queue<int> q);
+        void resetQueue(queue<queue<int>> q);
     public:
-        hClim(int hClimArrSize, int **hClimArr, int start, int end, int *hArr);
+        hClim(int arrSize, int **arr, int start, int end);
         ~hClim();
-        string searching();
+        bool searching();
+        int getCost();
+        string getPath();
 };
 
-hClim::hClim(int hClimArrSize, int **hClimArr, int start, int end, int *hArr){
-    this->hClimArrSize = hClimArrSize;
-    this->hClimArr = hClimArr;
+hClim::hClim(int arrSize, int **arr, int start, int end){
+    this->arrSize = arrSize;
+    this->arr = arr;
     this->start = start;
     this->end = end;
-    this->hArr = hArr;
 }
 
 hClim::~hClim(){}
 
-string hClim::searching(){
-    string result;
+bool hClim::searching(){
+    resetQueue(open);
+    resetQueue(closed);
+    resetQueue(path);
     open.push(queue<int>());
     open.front().push(start);
     while(true){
         if(open.empty()){
-            result = "Fail";
-            return result;
+            return false;
         }
         else if(open.front().back()==end){
-            result = "Success: ";
-            while(true){
-                result += to_string(open.front().front());
-                open.front().pop();
-                if(open.front().empty()){
-                    return result;
-                }else{
-                    result += " -> ";
-                }
-            }
+            path = open.front();
+            return true;
         }
         else{
-            queue<int> tmp = open.front();
+            closed.push(open.front());
             open.pop();
-            closed.push(tmp.back());
-            for(int i = 0;i < hClimArrSize;i++){
-                if(hClimArr[tmp.back()][i]!=0&&!checkClosed(i)){
-                    open.push(tmp);
+            for(int i = 0;i < arrSize;i++){
+                if(arr[closed.back().back()][i]!=0&&!reVisit(i)){
+                    open.push(closed.back());
                     open.back().push(i);
                 }
             }
@@ -67,8 +63,8 @@ string hClim::searching(){
     }
 }
 
-bool hClim::checkClosed(int n){
-    queue<int> tmp = closed;
+bool hClim::reVisit(int n){
+    queue<int> tmp = closed.back();
     while(!tmp.empty()){
         if(tmp.front() == n){
             return true;
@@ -80,6 +76,67 @@ bool hClim::checkClosed(int n){
     return false;
 }
 
-bool heuristics(){}
+int hClim::cost(queue<int> q){
+    queue<int> tmp = q;
+    int total = 0;
+    int n = 0;
+    if(tmp.empty()){
+        return total;
+    }
+    else{
+        while(true){
+            n = tmp.front();
+            tmp.pop();
+            if(!tmp.empty()){
+                total += arr[n][tmp.front()];
+                n = 0;
+            }
+            else{
+                return total;
+            }
+        }
+    }
+}
+
+string hClim::qtos(queue<int> q){
+    queue<int> tmp = q;
+    string str = "Fail";
+    if(tmp.empty()){
+        return str;
+    }
+    str = to_string(tmp.front());
+    tmp.pop();
+    str += " -> ";
+    while(true){
+        str += to_string(tmp.front());
+        tmp.pop();
+        if(tmp.empty()){
+            return str;
+        }
+        else{
+            str += " -> ";
+        }
+    }
+}
+
+int hClim::getCost(){
+    return cost(path);
+}
+
+string hClim::getPath(){
+    return qtos(path);
+}
+
+void hClim::resetQueue(queue<int> q){
+    while(!q.empty()){
+        q.pop();
+    }
+}
+
+void hClim::resetQueue(queue<queue<int>> q){
+    while(!q.empty()){
+        q.pop();
+    }
+}
 
 #endif

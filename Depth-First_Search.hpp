@@ -8,56 +8,56 @@ using namespace std;
 
 class dfSearch{
     private:
-        int dfArrSize;
-        int **dfArr;
+        int arrSize;
+        int **arr;
         int start;
         int end;
         stack<queue<int>> open;
-        queue<int> closed;
-        bool checkClosed(int n);
+        queue<queue<int>> closed;
+        queue<int> path;
+        bool reVisit(int n);
+        int cost(queue<int> q);
+        string qtos(queue<int> q);
+        void resetQueue(queue<int> q);
+        void resetQueue(queue<queue<int>> q);
+        void resetQueue(stack<queue<int>> s);
     public:
-        dfSearch(int dfArrSize, int **dfArr, int start, int end);
+        dfSearch(int arrSize, int **arr, int start, int end);
         ~dfSearch();
-        string searching();
+        bool searching();
+        int getCost();
+        string getPath();
 };
 
-dfSearch::dfSearch(int dfArrSize, int **dfArr, int start, int end){
-    this->dfArrSize = dfArrSize;
-    this->dfArr = dfArr;
+dfSearch::dfSearch(int arrSize, int **arr, int start, int end){
+    this->arrSize = arrSize;
+    this->arr = arr;
     this->start = start;
     this->end = end;
 }
 
 dfSearch::~dfSearch(){}
 
-string dfSearch::searching(){
-    string result;
+bool dfSearch::searching(){
+    resetQueue(open);
+    resetQueue(closed);
+    resetQueue(path);
     open.push(queue<int>());
     open.top().push(start);
     while(true){
         if(open.empty()){
-            result = "Fail";
-            return result;
+            return false;
         }
         else if(open.top().back()==end){
-            result = "Success: ";
-            while(true){
-                result += to_string(open.top().front());
-                open.top().pop();
-                if(open.top().empty()){
-                    return result;
-                }else{
-                    result += " -> ";
-                }
-            }
+            path = open.top();
+            return true;
         }
         else{
-            queue<int> tmp = open.top();
+            closed.push(open.top());
             open.pop();
-            closed.push(tmp.back());
-            for(int i = dfArrSize - 1;i >= 0;i--){
-                if(dfArr[tmp.back()][i]!=0&&!checkClosed(i)){
-                    open.push(tmp);
+            for(int i = arrSize - 1;i >= 0;i--){
+                if(arr[closed.back().back()][i]!=0&&!reVisit(i)){
+                    open.push(closed.back());
                     open.top().push(i);
                 }
             }
@@ -65,8 +65,8 @@ string dfSearch::searching(){
     }
 }
 
-bool dfSearch::checkClosed(int n){
-    queue<int> tmp = closed;
+bool dfSearch::reVisit(int n){
+    queue<int> tmp = closed.back();
     while(!tmp.empty()){
         if(tmp.front() == n){
             return true;
@@ -76,6 +76,75 @@ bool dfSearch::checkClosed(int n){
         }
     }
     return false;
+}
+
+int dfSearch::cost(queue<int> q){
+    queue<int> tmp = q;
+    int total = 0;
+    int n = 0;
+    if(tmp.empty()){
+        return total;
+    }
+    else{
+        while(true){
+            n = tmp.front();
+            tmp.pop();
+            if(!tmp.empty()){
+                total += arr[n][tmp.front()];
+                n = 0;
+            }
+            else{
+                return total;
+            }
+        }
+    }
+}
+
+string dfSearch::qtos(queue<int> q){
+    queue<int> tmp = q;
+    string str = "Fail";
+    if(tmp.empty()){
+        return str;
+    }
+    str = to_string(tmp.front());
+    tmp.pop();
+    str += " -> ";
+    while(true){
+        str += to_string(tmp.front());
+        tmp.pop();
+        if(tmp.empty()){
+            return str;
+        }
+        else{
+            str += " -> ";
+        }
+    }
+}
+
+int dfSearch::getCost(){
+    return cost(path);
+}
+
+string dfSearch::getPath(){
+    return qtos(path);
+}
+
+void dfSearch::resetQueue(queue<int> q){
+    while(!q.empty()){
+        q.pop();
+    }
+}
+
+void dfSearch::resetQueue(queue<queue<int>> q){
+    while(!q.empty()){
+        q.pop();
+    }
+}
+
+void dfSearch::resetQueue(stack<queue<int>> s){
+    while(!s.empty()){
+        s.pop();
+    }
 }
 
 #endif

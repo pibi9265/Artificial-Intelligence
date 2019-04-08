@@ -34,11 +34,17 @@ int main(){
     }
 
     bfSearch bf(arrSize, arr, start, end);
-    cout << bf.searching() << endl;
+    bf.searching();
+    cout << "Path: " << bf.getPath() << endl;
+    cout << "Cost: " << bf.getCost() << endl;
     dfSearch df(arrSize, arr, start, end);
-    cout << df.searching() << endl;
-    //hClim hillCliming(arrSize, arr, start, end, hArr);
-    //cout << hillCliming.searching() << endl;
+    df.searching();
+    cout << "Path: " << df.getPath() << endl;
+    cout << "Cost: " << df.getCost() << endl;
+    hClim hillCliming(arrSize, arr, start, end);
+    hillCliming.searching();
+    cout << "Path: " << hillCliming.getPath() << endl;
+    cout << "Cost: " << hillCliming.getCost() << endl;
 
     for(int i = 0;i < arrSize;i++){
         delete[] arr[i];
