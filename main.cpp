@@ -33,6 +33,12 @@ int main(){
         hArr[i] = 0;
     }
 
+    hArr[0] = 8;
+    hArr[1] = 7;
+    hArr[2] = 0;
+    hArr[3] = 5;
+    hArr[4] = 6;
+
     bfSearch bf(arrSize, arr, start, end);
     bf.searching();
     cout << "Path: " << bf.getPath() << endl;
@@ -41,7 +47,7 @@ int main(){
     df.searching();
     cout << "Path: " << df.getPath() << endl;
     cout << "Cost: " << df.getCost() << endl;
-    hClim hillCliming(arrSize, arr, start, end);
+    hClim hillCliming(arrSize, arr, start, end, hArr);
     hillCliming.searching();
     cout << "Path: " << hillCliming.getPath() << endl;
     cout << "Cost: " << hillCliming.getCost() << endl;

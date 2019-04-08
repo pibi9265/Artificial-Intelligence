@@ -11,6 +11,7 @@ class hClim{
         int **arr;
         int start;
         int end;
+        int *hArr;
         queue<queue<int>> open;
         queue<queue<int>> closed;
         queue<int> path;
@@ -20,23 +21,25 @@ class hClim{
         void resetQueue(queue<int> q);
         void resetQueue(queue<queue<int>> q);
     public:
-        hClim(int arrSize, int **arr, int start, int end);
+        hClim(int arrSize, int **arr, int start, int end, int *hArr);
         ~hClim();
         bool searching();
         int getCost();
         string getPath();
 };
 
-hClim::hClim(int arrSize, int **arr, int start, int end){
+hClim::hClim(int arrSize, int **arr, int start, int end, int *hArr){
     this->arrSize = arrSize;
     this->arr = arr;
     this->start = start;
     this->end = end;
+    this->hArr = hArr;
 }
 
 hClim::~hClim(){}
 
 bool hClim::searching(){
+    int tmp;
     resetQueue(open);
     resetQueue(closed);
     resetQueue(path);
@@ -53,12 +56,16 @@ bool hClim::searching(){
         else{
             closed.push(open.front());
             open.pop();
+            tmp = closed.back().back();
             for(int i = 0;i < arrSize;i++){
                 if(arr[closed.back().back()][i]!=0&&!reVisit(i)){
-                    open.push(closed.back());
-                    open.back().push(i);
+                    if(hArr[tmp]>hArr[i]){
+                        tmp = i;
+                    }
                 }
             }
+            open.push(closed.back());
+            open.back().push(tmp);
         }
     }
 }
