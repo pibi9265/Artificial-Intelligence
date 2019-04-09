@@ -64,6 +64,9 @@ bool hClim::searching(){
                     }
                 }
             }
+            if(tmp == closed.back().back()){
+                return false;
+            }
             open.push(closed.back());
             open.back().push(tmp);
         }

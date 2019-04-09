@@ -5,6 +5,7 @@ using namespace std;
 #include "Breadth-First_Search.hpp"
 #include "Depth-First_Search.hpp"
 #include "Hill-Climing.hpp"
+#include "Best-First_Search.hpp"
 
 int main(){
     int arrSize = 5;
@@ -58,6 +59,16 @@ int main(){
     delete[] arr;
 
     delete[] hArr;
+
+    queue<int> a;
+    a.push(1);
+    a.push(2);
+    queue<int> b;
+    b.push(1);
+    b.push(2);
+    b.push(3);
+
+    cout << (a == b) << endl;
 
     return 0;
 }
