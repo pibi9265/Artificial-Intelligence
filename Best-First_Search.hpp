@@ -20,7 +20,9 @@ class bFirst{
         string qtos(queue<int> q);
         void resetQueue(queue<int> q);
         void resetQueue(queue<queue<int>> q);
-        int heuristic(queue<int> q);
+        int heuristic();
+        bool overlap(queue<int> q);
+        queue<queue<int>> popNum(int n);
     public:
         bFirst(int arrSize, int **arr, int start, int end, int *hArr);
         ~bFirst();
@@ -150,8 +152,56 @@ void bFirst::resetQueue(queue<queue<int>> q){
     }
 }
 
-int bFirst::heuristic(queue<int> q){
-    return cost(q) + hArr[q.back()];
+int bFirst::heuristic(){
+    queue<queue<int>> q = open;
+    queue<int> result;
+    if(q.empty()){
+        return -1;
+    }
+    else{
+        result = q.front();
+        q.pop();
+        while(!q.empty()){
+            if(cost(result)>cost(q.front())){
+                result = q.front();
+            }
+            q.pop();
+        }
+    }
+    return result.back();
+}
+
+bool bFirst::overlap(queue<int> q){
+    queue<queue<int>> tmp = closed;
+    while(!tmp.empty()){
+        if(tmp.front() == q){
+            return true;
+        }
+        else{
+            tmp.pop();
+        }
+    }
+    return false;
+}
+
+queue<queue<int>> bFirst::popNum(int n){
+    stack<queue<int>> tmp;
+    queue<queue<int>> result = open;
+    while(!tmp.empty()){
+        if(result.front().back() == n){
+            result.pop();
+            break;
+        }
+        else{
+            tmp.push(result.front());
+            result.pop();
+        }
+    }
+    while(!tmp.empty()){
+        result.push(tmp.top());
+        tmp.pop();
+    }
+    return result;
 }
 
 #endif
