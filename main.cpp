@@ -44,14 +44,21 @@ int main(){
     bf.searching();
     cout << "Path: " << bf.getPath() << endl;
     cout << "Cost: " << bf.getCost() << endl;
+
     dfSearch df(arrSize, arr, start, end);
     df.searching();
     cout << "Path: " << df.getPath() << endl;
     cout << "Cost: " << df.getCost() << endl;
+
     hClim hillCliming(arrSize, arr, start, end, hArr);
     hillCliming.searching();
     cout << "Path: " << hillCliming.getPath() << endl;
     cout << "Cost: " << hillCliming.getCost() << endl;
+
+    bFirst bestFirst(arrSize, arr, start, end, hArr);
+    bestFirst.searching();
+    cout << "Path: " << bestFirst.getPath() << endl;
+    cout << "Cost: " << bestFirst.getCost() << endl;
 
     for(int i = 0;i < arrSize;i++){
         delete[] arr[i];
@@ -59,16 +66,6 @@ int main(){
     delete[] arr;
 
     delete[] hArr;
-
-    queue<int> a;
-    a.push(1);
-    a.push(2);
-    queue<int> b;
-    b.push(1);
-    b.push(2);
-    b.push(3);
-
-    cout << (a == b) << endl;
 
     return 0;
 }

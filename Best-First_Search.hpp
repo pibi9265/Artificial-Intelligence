@@ -20,9 +20,9 @@ class bFirst{
         string qtos(queue<int> q);
         void resetQueue(queue<int> q);
         void resetQueue(queue<queue<int>> q);
-        int heuristic();
+        queue<int> heuristic();
         bool overlap(queue<int> q);
-        queue<queue<int>> popNum(int n);
+        void popOpen(queue<int> q);
     public:
         bFirst(int arrSize, int **arr, int start, int end, int *hArr);
         ~bFirst();
@@ -42,7 +42,7 @@ bFirst::bFirst(int arrSize, int **arr, int start, int end, int *hArr){
 bFirst::~bFirst(){}
 
 bool bFirst::searching(){
-    int tmp;
+    queue<int> tmp;
     resetQueue(open);
     resetQueue(closed);
     resetQueue(path);
@@ -57,21 +57,15 @@ bool bFirst::searching(){
             return true;
         }
         else{
-            closed.push(open.front());
-            open.pop();
-            tmp = closed.back().back();
+            tmp = heuristic();
+            popOpen(tmp);
+            closed.push(tmp);
             for(int i = 0;i < arrSize;i++){
                 if(arr[closed.back().back()][i]!=0&&!reVisit(i)){
-                    if(hArr[tmp]>hArr[i]){
-                        tmp = i;
-                    }
+                    open.push(closed.back());
+                    open.back().push(i);
                 }
             }
-            if(tmp == closed.back().back()){
-                return false;
-            }
-            open.push(closed.back());
-            open.back().push(tmp);
         }
     }
 }
@@ -152,11 +146,11 @@ void bFirst::resetQueue(queue<queue<int>> q){
     }
 }
 
-int bFirst::heuristic(){
+queue<int> bFirst::heuristic(){
     queue<queue<int>> q = open;
     queue<int> result;
     if(q.empty()){
-        return -1;
+        return result;
     }
     else{
         result = q.front();
@@ -168,7 +162,7 @@ int bFirst::heuristic(){
             q.pop();
         }
     }
-    return result.back();
+    return result;
 }
 
 bool bFirst::overlap(queue<int> q){
@@ -184,24 +178,22 @@ bool bFirst::overlap(queue<int> q){
     return false;
 }
 
-queue<queue<int>> bFirst::popNum(int n){
+void bFirst::popOpen(queue<int> q){
     stack<queue<int>> tmp;
-    queue<queue<int>> result = open;
-    while(!tmp.empty()){
-        if(result.front().back() == n){
-            result.pop();
+    while(!open.empty()){
+        if(open.front() == q){
+            open.pop();
             break;
         }
         else{
-            tmp.push(result.front());
-            result.pop();
+            tmp.push(open.front());
+            open.pop();
         }
     }
     while(!tmp.empty()){
-        result.push(tmp.top());
+        open.push(tmp.top());
         tmp.pop();
     }
-    return result;
 }
 
 #endif
