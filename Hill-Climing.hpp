@@ -39,36 +39,39 @@ hClim::hClim(int arrSize, int **arr, int start, int end, int *hArr){
 hClim::~hClim(){}
 
 bool hClim::searching(){
-    int tmp;
-    resetQueue(open);
+    bool firstTry = true;
+    int numTmp = -1;
+    int costTmp;
     resetQueue(closed);
     resetQueue(path);
-    open.push(queue<int>());
-    open.front().push(start);
+    closed.push(queue<int>());
+    closed.front().push(start);
     while(true){
-        if(open.empty()){
+        for(int i = 0;i < arrSize;i++){
+            if(arr[closed.back().back()][i]!=0&&!reVisit(i)){
+                if(firstTry){
+                    costTmp = cost(closed.back())+arr[closed.back().back()][i]+hArr[i];
+                    numTmp = i;
+                    firstTry = false;
+                }
+                else if(costTmp > cost(closed.back())+arr[closed.back().back()][i]+hArr[i]){
+                    costTmp = cost(closed.back())+arr[closed.back().back()][i]+hArr[i];
+                    numTmp = i;
+                }
+            }
+        }
+        if(numTmp == -1){
             return false;
         }
-        else if(open.front().back()==end){
-            path = open.front();
+        else if(numTmp == end){
+            path = closed.back();
+            path.push(numTmp);
             return true;
         }
         else{
-            closed.push(open.front());
-            open.pop();
-            tmp = closed.back().back();
-            for(int i = 0;i < arrSize;i++){
-                if(arr[closed.back().back()][i]!=0&&!reVisit(i)){
-                    if(hArr[tmp]>hArr[i]){
-                        tmp = i;
-                    }
-                }
-            }
-            if(tmp == closed.back().back()){
-                return false;
-            }
-            open.push(closed.back());
-            open.back().push(tmp);
+            closed.back().push(numTmp);
+            firstTry = true;
+            numTmp = -1;
         }
     }
 }

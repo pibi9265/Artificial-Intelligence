@@ -20,8 +20,7 @@ class bFirst{
         string qtos(queue<int> q);
         void resetQueue(queue<int> q);
         void resetQueue(queue<queue<int>> q);
-        queue<int> heuristic();
-        bool overlap(queue<int> q);
+        queue<int> bestofAllChild();
         void popOpen(queue<int> q);
     public:
         bFirst(int arrSize, int **arr, int start, int end, int *hArr);
@@ -57,7 +56,7 @@ bool bFirst::searching(){
             return true;
         }
         else{
-            tmp = heuristic();
+            tmp = bestofAllChild();
             popOpen(tmp);
             closed.push(tmp);
             for(int i = 0;i < arrSize;i++){
@@ -146,7 +145,7 @@ void bFirst::resetQueue(queue<queue<int>> q){
     }
 }
 
-queue<int> bFirst::heuristic(){
+queue<int> bFirst::bestofAllChild(){
     queue<queue<int>> q = open;
     queue<int> result;
     if(q.empty()){
@@ -163,19 +162,6 @@ queue<int> bFirst::heuristic(){
         }
     }
     return result;
-}
-
-bool bFirst::overlap(queue<int> q){
-    queue<queue<int>> tmp = closed;
-    while(!tmp.empty()){
-        if(tmp.front() == q){
-            return true;
-        }
-        else{
-            tmp.pop();
-        }
-    }
-    return false;
 }
 
 void bFirst::popOpen(queue<int> q){
