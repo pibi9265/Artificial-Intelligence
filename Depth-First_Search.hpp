@@ -1,6 +1,7 @@
 #ifndef DFSEARCH_H
 #define DFSEARCH_H
 
+#include <iostream> //debug
 #include <string>
 #include <queue>
 #include <stack>
@@ -14,19 +15,17 @@ class dfSearch{
         int end;
         stack<queue<int>> open;
         queue<queue<int>> closed;
-        queue<int> path;
+        queue<queue<int>> path;
+        queue<int> sPath;
         bool reVisit(int n);
         int cost(queue<int> q);
         string qtos(queue<int> q);
-        void resetQueue(queue<int> q);
-        void resetQueue(queue<queue<int>> q);
-        void resetQueue(stack<queue<int>> s);
+        bool findSP();
     public:
         dfSearch(int arrSize, int **arr, int start, int end);
         ~dfSearch();
         bool searching();
-        int getCost();
-        string getPath();
+        bool searchingSP();
 };
 
 dfSearch::dfSearch(int arrSize, int **arr, int start, int end){
@@ -39,9 +38,9 @@ dfSearch::dfSearch(int arrSize, int **arr, int start, int end){
 dfSearch::~dfSearch(){}
 
 bool dfSearch::searching(){
-    resetQueue(open);
-    resetQueue(closed);
-    resetQueue(path);
+    open = stack<queue<int>>();
+    closed = queue<queue<int>>();
+    path = queue<queue<int>>();
     open.push(queue<int>());
     open.top().push(start);
     while(true){
@@ -49,7 +48,7 @@ bool dfSearch::searching(){
             return false;
         }
         else if(open.top().back()==end){
-            path = open.top();
+            path.push(open.top());
             return true;
         }
         else{
@@ -62,6 +61,37 @@ bool dfSearch::searching(){
                 }
             }
         }
+    }
+}
+
+bool dfSearch::searchingSP(){
+    int step = 1; //debug
+    open = stack<queue<int>>();
+    closed = queue<queue<int>>();
+    path = queue<queue<int>>();
+    sPath = queue<int>();
+    open.push(queue<int>());
+    open.top().push(start);
+    while(true){
+        if(open.empty()){
+            findSP();
+            cout<<"[First Path]\n -Path: "<<qtos(path.front())<<"\n -Cost: "<<cost(path.front())<<endl; //debug
+            cout<<"[Shortest Path]\n -Path: "<<qtos(sPath)<<"\n -Cost: "<<cost(sPath)<<"\n"<<endl; //debug
+            return true;
+        }
+        else if(open.top().back()==end){
+            path.push(open.top());
+        }
+        closed.push(open.top());
+        open.pop();
+        for(int i = arrSize - 1;i >= 0;i--){
+            if(arr[closed.back().back()][i]!=0&&!reVisit(i)){
+                open.push(closed.back());
+                open.top().push(i);
+            }
+        }
+        cout<<"[Step "<<step<<"]\n -Path: "<<qtos(closed.back())<<"\n -Cost: "<<cost(closed.back())<<endl; //debug
+        step++; //debug
     }
 }
 
@@ -106,45 +136,34 @@ string dfSearch::qtos(queue<int> q){
     if(tmp.empty()){
         return str;
     }
-    str = to_string(tmp.front());
-    tmp.pop();
-    str += " -> ";
-    while(true){
-        str += to_string(tmp.front());
+    else{
+        str = to_string(tmp.front());
         tmp.pop();
-        if(tmp.empty()){
-            return str;
-        }
-        else{
+        while(!tmp.empty()){
             str += " -> ";
+            str += to_string(tmp.front());
+            tmp.pop();
         }
     }
+    return str;
 }
 
-int dfSearch::getCost(){
-    return cost(path);
-}
-
-string dfSearch::getPath(){
-    return qtos(path);
-}
-
-void dfSearch::resetQueue(queue<int> q){
-    while(!q.empty()){
-        q.pop();
+bool dfSearch::findSP(){
+    queue<queue<int>> tmp = path;
+    if(tmp.empty()){
+        return false;
     }
-}
-
-void dfSearch::resetQueue(queue<queue<int>> q){
-    while(!q.empty()){
-        q.pop();
+    else{
+        sPath = tmp.front();
+        tmp.pop();
     }
-}
-
-void dfSearch::resetQueue(stack<queue<int>> s){
-    while(!s.empty()){
-        s.pop();
+    while(!tmp.empty()){
+        if(cost(sPath)>cost(tmp.front())){
+            sPath = tmp.front();
+            tmp.pop();
+        }
     }
+    return true;
 }
 
 #endif

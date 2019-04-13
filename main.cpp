@@ -42,27 +42,19 @@ int main(){
 
     cout << "Breadth-First Search" << endl;
     bfSearch bf(arrSize, arr, start, end);
-    bf.searching();
-    cout << "Path: " << bf.getPath() << endl;
-    cout << "Cost: " << bf.getCost() << "\n" << endl;
+    bf.searchingSP();
 
     cout << "Depth-First Search" << endl;
     dfSearch df(arrSize, arr, start, end);
-    df.searching();
-    cout << "Path: " << df.getPath() << endl;
-    cout << "Cost: " << df.getCost() << "\n" << endl;
+    df.searchingSP();
 
     cout << "Hill-Climing" << endl;
     hClim hillCliming(arrSize, arr, start, end, hArr);
     hillCliming.searching();
-    cout << "Path: " << hillCliming.getPath() << endl;
-    cout << "Cost: " << hillCliming.getCost() << "\n" << endl;
 
     cout << "Best-First Search" << endl;
     bFirst bestFirst(arrSize, arr, start, end, hArr);
     bestFirst.searching();
-    cout << "Path: " << bestFirst.getPath() << endl;
-    cout << "Cost: " << bestFirst.getCost() << "\n" << endl;
 
     for(int i = 0;i < arrSize;i++){
         delete[] arr[i];

@@ -1,6 +1,7 @@
 #ifndef HCLIM_H
 #define HCLIM_H
 
+#include <iostream> //debug
 #include <string>
 #include <queue>
 using namespace std;
@@ -12,14 +13,11 @@ class hClim{
         int start;
         int end;
         int *hArr;
-        queue<queue<int>> open;
-        queue<queue<int>> closed;
+        queue<int> pathTmp;
         queue<int> path;
         bool reVisit(int n);
         int cost(queue<int> q);
         string qtos(queue<int> q);
-        void resetQueue(queue<int> q);
-        void resetQueue(queue<queue<int>> q);
     public:
         hClim(int arrSize, int **arr, int start, int end, int *hArr);
         ~hClim();
@@ -39,45 +37,51 @@ hClim::hClim(int arrSize, int **arr, int start, int end, int *hArr){
 hClim::~hClim(){}
 
 bool hClim::searching(){
+    int step = 1; //debug
     bool firstTry = true;
     int numTmp = -1;
     int costTmp;
-    resetQueue(closed);
-    resetQueue(path);
-    closed.push(queue<int>());
-    closed.front().push(start);
+    pathTmp = queue<int>();
+    path = queue<int>();
+    pathTmp.push(start);
+    cout<<"[Step "<<step<<"]\n -Path: "<<qtos(pathTmp)<<"\n -Cost: "<<cost(pathTmp)<<endl; //debug
+    step++; //debug
     while(true){
         for(int i = 0;i < arrSize;i++){
-            if(arr[closed.back().back()][i]!=0&&!reVisit(i)){
+            if(arr[pathTmp.back()][i]!=0&&!reVisit(i)){
                 if(firstTry){
-                    costTmp = cost(closed.back())+arr[closed.back().back()][i]+hArr[i];
+                    costTmp = cost(pathTmp)+arr[pathTmp.back()][i]+hArr[i];
                     numTmp = i;
                     firstTry = false;
                 }
-                else if(costTmp > cost(closed.back())+arr[closed.back().back()][i]+hArr[i]){
-                    costTmp = cost(closed.back())+arr[closed.back().back()][i]+hArr[i];
+                else if(costTmp > cost(pathTmp)+arr[pathTmp.back()][i]+hArr[i]){
+                    costTmp = cost(pathTmp)+arr[pathTmp.back()][i]+hArr[i];
                     numTmp = i;
                 }
             }
         }
         if(numTmp == -1){
+            cout<<"[Error]\n -Local Maximum"<<endl; //debug
             return false;
         }
         else if(numTmp == end){
-            path = closed.back();
+            path = pathTmp;
             path.push(numTmp);
+            cout<<"[Last Step "<<step<<"]\n -Path: "<<qtos(path)<<"\n -Cost: "<<cost(path)<<"\n"<<endl; //debug
             return true;
         }
         else{
-            closed.back().push(numTmp);
+            pathTmp.push(numTmp);
+            cout<<"[Step "<<step<<"]\n -Path: "<<qtos(pathTmp)<<"\n -Cost: "<<cost(pathTmp)<<endl; //debug
             firstTry = true;
             numTmp = -1;
         }
+        step++; //debug
     }
 }
 
 bool hClim::reVisit(int n){
-    queue<int> tmp = closed.back();
+    queue<int> tmp = pathTmp;
     while(!tmp.empty()){
         if(tmp.front() == n){
             return true;
@@ -117,19 +121,16 @@ string hClim::qtos(queue<int> q){
     if(tmp.empty()){
         return str;
     }
-    str = to_string(tmp.front());
-    tmp.pop();
-    str += " -> ";
-    while(true){
-        str += to_string(tmp.front());
+    else{
+        str = to_string(tmp.front());
         tmp.pop();
-        if(tmp.empty()){
-            return str;
-        }
-        else{
+        while(!tmp.empty()){
             str += " -> ";
+            str += to_string(tmp.front());
+            tmp.pop();
         }
     }
+    return str;
 }
 
 int hClim::getCost(){
@@ -138,18 +139,6 @@ int hClim::getCost(){
 
 string hClim::getPath(){
     return qtos(path);
-}
-
-void hClim::resetQueue(queue<int> q){
-    while(!q.empty()){
-        q.pop();
-    }
-}
-
-void hClim::resetQueue(queue<queue<int>> q){
-    while(!q.empty()){
-        q.pop();
-    }
 }
 
 #endif

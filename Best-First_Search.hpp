@@ -1,6 +1,7 @@
 #ifndef BFIRST_H
 #define BFIRST_H
 
+#include <iostream> //debug
 #include <string>
 #include <queue>
 using namespace std;
@@ -18,9 +19,7 @@ class bFirst{
         bool reVisit(int n);
         int cost(queue<int> q);
         string qtos(queue<int> q);
-        void resetQueue(queue<int> q);
-        void resetQueue(queue<queue<int>> q);
-        queue<int> bestofAllChild();
+        queue<int> bestOpen();
         void popOpen(queue<int> q);
     public:
         bFirst(int arrSize, int **arr, int start, int end, int *hArr);
@@ -41,32 +40,36 @@ bFirst::bFirst(int arrSize, int **arr, int start, int end, int *hArr){
 bFirst::~bFirst(){}
 
 bool bFirst::searching(){
+    int step = 1; //debug
     queue<int> tmp;
-    resetQueue(open);
-    resetQueue(closed);
-    resetQueue(path);
+    open = queue<queue<int>>();
+    closed = queue<queue<int>>();
+    path = queue<int>();
     open.push(queue<int>());
     open.front().push(start);
-    while(true){
-        if(open.empty()){
-            return false;
-        }
-        else if(open.front().back()==end){
+    tmp = open.front();
+    while(!open.empty()){
+        if(tmp.back()==end){
+            cout<<"[Last Step "<<step<<"]\n -Path: "<<qtos(tmp)<<"\n -Cost: "<<cost(tmp)<<"\n"<<endl; //debug
             path = open.front();
             return true;
         }
         else{
-            tmp = bestofAllChild();
-            popOpen(tmp);
+            cout<<"[Step "<<step<<"]\n -Path: "<<qtos(tmp)<<"\n -Cost: "<<cost(tmp)<<endl; //debug
             closed.push(tmp);
+            popOpen(tmp);
             for(int i = 0;i < arrSize;i++){
                 if(arr[closed.back().back()][i]!=0&&!reVisit(i)){
                     open.push(closed.back());
                     open.back().push(i);
                 }
             }
+            tmp = bestOpen();
         }
+        step++; //debug
     }
+    cout<<"[Error]"<<endl; //debug
+    return false;
 }
 
 bool bFirst::reVisit(int n){
@@ -110,19 +113,16 @@ string bFirst::qtos(queue<int> q){
     if(tmp.empty()){
         return str;
     }
-    str = to_string(tmp.front());
-    tmp.pop();
-    str += " -> ";
-    while(true){
-        str += to_string(tmp.front());
+    else{
+        str = to_string(tmp.front());
         tmp.pop();
-        if(tmp.empty()){
-            return str;
-        }
-        else{
+        while(!tmp.empty()){
             str += " -> ";
+            str += to_string(tmp.front());
+            tmp.pop();
         }
     }
+    return str;
 }
 
 int bFirst::getCost(){
@@ -133,29 +133,14 @@ string bFirst::getPath(){
     return qtos(path);
 }
 
-void bFirst::resetQueue(queue<int> q){
-    while(!q.empty()){
-        q.pop();
-    }
-}
-
-void bFirst::resetQueue(queue<queue<int>> q){
-    while(!q.empty()){
-        q.pop();
-    }
-}
-
-queue<int> bFirst::bestofAllChild(){
+queue<int> bFirst::bestOpen(){
     queue<queue<int>> q = open;
     queue<int> result;
-    if(q.empty()){
-        return result;
-    }
-    else{
+    if(!q.empty()){
         result = q.front();
         q.pop();
         while(!q.empty()){
-            if(cost(result)>cost(q.front())){
+            if((cost(result)+hArr[result.back()])>(cost(q.front())+hArr[q.front().back()])){
                 result = q.front();
             }
             q.pop();
@@ -165,7 +150,7 @@ queue<int> bFirst::bestofAllChild(){
 }
 
 void bFirst::popOpen(queue<int> q){
-    stack<queue<int>> tmp;
+    queue<queue<int>> tmp;
     while(!open.empty()){
         if(open.front() == q){
             open.pop();
@@ -176,10 +161,11 @@ void bFirst::popOpen(queue<int> q){
             open.pop();
         }
     }
-    while(!tmp.empty()){
-        open.push(tmp.top());
-        tmp.pop();
+    while(!open.empty()){
+        tmp.push(open.front());
+        open.pop();
     }
+    open = tmp;
 }
 
 #endif

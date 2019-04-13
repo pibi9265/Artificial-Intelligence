@@ -1,6 +1,7 @@
 #ifndef BFSEARCH_H
 #define BFSEARCH_H
 
+#include <iostream> //debug
 #include <string>
 #include <queue>
 using namespace std;
@@ -13,18 +14,17 @@ class bfSearch{
         int end;
         queue<queue<int>> open;
         queue<queue<int>> closed;
-        queue<int> path;
+        queue<queue<int>> path;
+        queue<int> sPath;
         bool reVisit(int n);
         int cost(queue<int> q);
         string qtos(queue<int> q);
-        void resetQueue(queue<int> q);
-        void resetQueue(queue<queue<int>> q);
+        bool findSP();
     public:
         bfSearch(int arrSize, int **arr, int start, int end);
         ~bfSearch();
         bool searching();
-        int getCost();
-        string getPath();
+        bool searchingSP();
 };
 
 bfSearch::bfSearch(int arrSize, int **arr, int start, int end){
@@ -37,9 +37,9 @@ bfSearch::bfSearch(int arrSize, int **arr, int start, int end){
 bfSearch::~bfSearch(){}
 
 bool bfSearch::searching(){
-    resetQueue(open);
-    resetQueue(closed);
-    resetQueue(path);
+    open = queue<queue<int>>();
+    closed = queue<queue<int>>();
+    path = queue<queue<int>>();
     open.push(queue<int>());
     open.front().push(start);
     while(true){
@@ -47,7 +47,7 @@ bool bfSearch::searching(){
             return false;
         }
         else if(open.front().back()==end){
-            path = open.front();
+            path.push(open.front());
             return true;
         }
         else{
@@ -60,6 +60,37 @@ bool bfSearch::searching(){
                 }
             }
         }
+    }
+}
+
+bool bfSearch::searchingSP(){
+    int step = 1; //debug
+    open = queue<queue<int>>();
+    closed = queue<queue<int>>();
+    path = queue<queue<int>>();
+    sPath = queue<int>();
+    open.push(queue<int>());
+    open.front().push(start);
+    while(true){
+        if(open.empty()){
+            findSP();
+            cout<<"[First Path]\n -Path: "<<qtos(path.front())<<"\n -Cost: "<<cost(path.front())<<endl; //debug
+            cout<<"[Shortest Path]\n -Path: "<<qtos(sPath)<<"\n -Cost: "<<cost(sPath)<<"\n"<<endl; //debug
+            return true;
+        }
+        else if(open.front().back()==end){
+            path.push(open.front());
+        }
+        closed.push(open.front());
+        open.pop();
+        for(int i = 0;i < arrSize;i++){
+            if(arr[closed.back().back()][i]!=0&&!reVisit(i)){
+                open.push(closed.back());
+                open.back().push(i);
+            }
+        }
+        cout<<"[Step "<<step<<"]\n -Path: "<<qtos(closed.back())<<"\n -Cost: "<<cost(closed.back())<<endl; //debug
+        step++; //debug
     }
 }
 
@@ -104,39 +135,34 @@ string bfSearch::qtos(queue<int> q){
     if(tmp.empty()){
         return str;
     }
-    str = to_string(tmp.front());
-    tmp.pop();
-    str += " -> ";
-    while(true){
-        str += to_string(tmp.front());
+    else{
+        str = to_string(tmp.front());
         tmp.pop();
-        if(tmp.empty()){
-            return str;
-        }
-        else{
+        while(!tmp.empty()){
             str += " -> ";
+            str += to_string(tmp.front());
+            tmp.pop();
         }
     }
+    return str;
 }
 
-int bfSearch::getCost(){
-    return cost(path);
-}
-
-string bfSearch::getPath(){
-    return qtos(path);
-}
-
-void bfSearch::resetQueue(queue<int> q){
-    while(!q.empty()){
-        q.pop();
+bool bfSearch::findSP(){
+    queue<queue<int>> tmp = path;
+    if(tmp.empty()){
+        return false;
     }
-}
-
-void bfSearch::resetQueue(queue<queue<int>> q){
-    while(!q.empty()){
-        q.pop();
+    else{
+        sPath = tmp.front();
+        tmp.pop();
     }
+    while(!tmp.empty()){
+        if(cost(sPath)>cost(tmp.front())){
+            sPath = tmp.front();
+            tmp.pop();
+        }
+    }
+    return true;
 }
 
 #endif
