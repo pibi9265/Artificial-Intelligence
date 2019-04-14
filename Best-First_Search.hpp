@@ -22,6 +22,7 @@ class bFirst{
         string qtos(queue<queue<int>> q);
         queue<int> bestOpen();
         void popOpen(queue<int> q);
+        string ntoc(int n); //debug
     public:
         bFirst(int arrSize, int **arr, int start, int end, int *hArr);
         ~bFirst();
@@ -119,11 +120,11 @@ string bFirst::qtos(queue<int> q){
         return str;
     }
     else{
-        str = to_string(tmp.front());
+        str = ntoc(tmp.front()); //debug //str = to_string(tmp.front());
         tmp.pop();
         while(!tmp.empty()){
             str += " -> ";
-            str += to_string(tmp.front());
+            str += ntoc(tmp.front()); //debug //str += to_string(tmp.front());
             tmp.pop();
         }
     }
@@ -137,11 +138,11 @@ string bFirst::qtos(queue<queue<int>> q){
         return str;
     }
     else{
-        str = to_string(tmp.front().back());
+        str = ntoc(tmp.front().back()); //debug //str = to_string(tmp.front().back());
         tmp.pop();
         while(!tmp.empty()){
             str += " ";
-            str += to_string(tmp.front().back());
+            str += ntoc(tmp.front().back()); //debug //str += to_string(tmp.front().back());
             tmp.pop();
         }
     }
@@ -189,6 +190,29 @@ void bFirst::popOpen(queue<int> q){
         open.pop();
     }
     open = tmp;
+}
+
+string bFirst::ntoc(int n){ //debug
+    if(n == 0) return "Arad";
+    else if(n == 1) return "Bucharest";
+    else if(n == 2) return "Craiova";
+    else if(n == 3) return "Dobreta";
+    else if(n == 4) return "Eforie";
+    else if(n == 5) return "Giurgiu";
+    else if(n == 6) return "Hirsova";
+    else if(n == 7) return "Iasi";
+    else if(n == 8) return "Lugoj";
+    else if(n == 9) return "Mehadia";
+    else if(n == 10) return "Neamt";
+    else if(n == 11) return "Oradea";
+    else if(n == 12) return "Pitesti";
+    else if(n == 13) return "Rimnicu_Vilcea";
+    else if(n == 14) return "Sibiu";
+    else if(n == 15) return "Timisoara";
+    else if(n == 16) return "Urziceni";
+    else if(n == 17) return "Vaslui";
+    else if(n == 18) return "Yagaras";
+    else if(n == 19) return "Zerind";
 }
 
 #endif
