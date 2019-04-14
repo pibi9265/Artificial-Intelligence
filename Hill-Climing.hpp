@@ -23,8 +23,6 @@ class hClim{
         hClim(int arrSize, int **arr, int start, int end, int *hArr);
         ~hClim();
         bool searching();
-        int getCost();
-        string getPath();
 };
 
 hClim::hClim(int arrSize, int **arr, int start, int end, int *hArr){
@@ -132,14 +130,6 @@ string hClim::qtos(queue<int> q){
         }
     }
     return str;
-}
-
-int hClim::getCost(){
-    return cost(path);
-}
-
-string hClim::getPath(){
-    return qtos(path);
 }
 
 string hClim::ntoc(int n){ //debug

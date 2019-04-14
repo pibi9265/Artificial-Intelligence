@@ -27,8 +27,6 @@ class bFirst{
         bFirst(int arrSize, int **arr, int start, int end, int *hArr);
         ~bFirst();
         bool searching();
-        int getCost();
-        string getPath();
 };
 
 bFirst::bFirst(int arrSize, int **arr, int start, int end, int *hArr){
@@ -147,14 +145,6 @@ string bFirst::qtos(queue<queue<int>> q){
         }
     }
     return str;
-}
-
-int bFirst::getCost(){
-    return cost(path);
-}
-
-string bFirst::getPath(){
-    return qtos(path);
 }
 
 queue<int> bFirst::bestOpen(){
