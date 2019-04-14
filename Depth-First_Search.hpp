@@ -203,8 +203,8 @@ bool dfSearch::findSP(){
     while(!tmp.empty()){
         if(cost(sPath)>cost(tmp.front())){
             sPath = tmp.front();
-            tmp.pop();
         }
+        tmp.pop();
     }
     return true;
 }
