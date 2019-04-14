@@ -20,6 +20,8 @@ class dfSearch{
         bool reVisit(int n);
         int cost(queue<int> q);
         string qtos(queue<int> q);
+        string qtos(queue<queue<int>> q);
+        string stos(stack<queue<int>> s);
         bool findSP();
     public:
         dfSearch(int arrSize, int **arr, int start, int end);
@@ -91,6 +93,7 @@ bool dfSearch::searchingSP(){
             }
         }
         cout<<"[Step "<<step<<"]\n -Path: "<<qtos(closed.back())<<"\n -Cost: "<<cost(closed.back())<<endl; //debug
+        cout<<" -Open: "<<stos(open)<<"\n -Closed: "<<qtos(closed)<<endl; //debug
         step++; //debug
     }
 }
@@ -132,7 +135,7 @@ int dfSearch::cost(queue<int> q){
 
 string dfSearch::qtos(queue<int> q){
     queue<int> tmp = q;
-    string str = "Fail";
+    string str = "Empty";
     if(tmp.empty()){
         return str;
     }
@@ -142,6 +145,46 @@ string dfSearch::qtos(queue<int> q){
         while(!tmp.empty()){
             str += " -> ";
             str += to_string(tmp.front());
+            tmp.pop();
+        }
+    }
+    return str;
+}
+
+string dfSearch::qtos(queue<queue<int>> q){
+    queue<queue<int>> tmp = q;
+    string str = "Empty";
+    if(tmp.empty()){
+        return str;
+    }
+    else{
+        str = to_string(tmp.front().back());
+        tmp.pop();
+        while(!tmp.empty()){
+            str += " ";
+            str += to_string(tmp.front().back());
+            tmp.pop();
+        }
+    }
+    return str;
+}
+
+string dfSearch::stos(stack<queue<int>> s){
+    stack<queue<int>> tmp;
+    string str = "Empty";
+    while(!s.empty()){
+        tmp.push(s.top());
+        s.pop();
+    }
+    if(tmp.empty()){
+        return str;
+    }
+    else{
+        str = to_string(tmp.top().back());
+        tmp.pop();
+        while(!tmp.empty()){
+            str += " ";
+            str += to_string(tmp.top().back());
             tmp.pop();
         }
     }

@@ -19,6 +19,7 @@ class bfSearch{
         bool reVisit(int n);
         int cost(queue<int> q);
         string qtos(queue<int> q);
+        string qtos(queue<queue<int>> q);
         bool findSP();
     public:
         bfSearch(int arrSize, int **arr, int start, int end);
@@ -90,6 +91,7 @@ bool bfSearch::searchingSP(){
             }
         }
         cout<<"[Step "<<step<<"]\n -Path: "<<qtos(closed.back())<<"\n -Cost: "<<cost(closed.back())<<endl; //debug
+        cout<<" -Open: "<<qtos(open)<<"\n -Closed: "<<qtos(closed)<<endl; //debug
         step++; //debug
     }
 }
@@ -131,7 +133,7 @@ int bfSearch::cost(queue<int> q){
 
 string bfSearch::qtos(queue<int> q){
     queue<int> tmp = q;
-    string str = "Fail";
+    string str = "Empty";
     if(tmp.empty()){
         return str;
     }
@@ -141,6 +143,24 @@ string bfSearch::qtos(queue<int> q){
         while(!tmp.empty()){
             str += " -> ";
             str += to_string(tmp.front());
+            tmp.pop();
+        }
+    }
+    return str;
+}
+
+string bfSearch::qtos(queue<queue<int>> q){
+    queue<queue<int>> tmp = q;
+    string str = "Empty";
+    if(tmp.empty()){
+        return str;
+    }
+    else{
+        str = to_string(tmp.front().back());
+        tmp.pop();
+        while(!tmp.empty()){
+            str += " ";
+            str += to_string(tmp.front().back());
             tmp.pop();
         }
     }

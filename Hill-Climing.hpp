@@ -117,7 +117,7 @@ int hClim::cost(queue<int> q){
 
 string hClim::qtos(queue<int> q){
     queue<int> tmp = q;
-    string str = "Fail";
+    string str = "Empty";
     if(tmp.empty()){
         return str;
     }

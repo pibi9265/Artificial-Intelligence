@@ -19,6 +19,7 @@ class bFirst{
         bool reVisit(int n);
         int cost(queue<int> q);
         string qtos(queue<int> q);
+        string qtos(queue<queue<int>> q);
         queue<int> bestOpen();
         void popOpen(queue<int> q);
     public:
@@ -50,8 +51,11 @@ bool bFirst::searching(){
     tmp = open.front();
     while(!open.empty()){
         if(tmp.back()==end){
-            cout<<"[Last Step "<<step<<"]\n -Path: "<<qtos(tmp)<<"\n -Cost: "<<cost(tmp)<<"\n"<<endl; //debug
-            path = open.front();
+            closed.push(tmp);
+            popOpen(tmp);
+            path = tmp;
+            cout<<"[Last Step "<<step<<"]\n -Path: "<<qtos(tmp)<<"\n -Cost: "<<cost(tmp)<<endl; //debug
+            cout<<" -Open: "<<qtos(open)<<"\n -Closed: "<<qtos(closed)<<"\n"<<endl; //debug
             return true;
         }
         else{
@@ -64,6 +68,7 @@ bool bFirst::searching(){
                     open.back().push(i);
                 }
             }
+            cout<<" -Open: "<<qtos(open)<<"\n -Closed: "<<qtos(closed)<<endl; //debug
             tmp = bestOpen();
         }
         step++; //debug
@@ -109,7 +114,7 @@ int bFirst::cost(queue<int> q){
 
 string bFirst::qtos(queue<int> q){
     queue<int> tmp = q;
-    string str = "Fail";
+    string str = "Empty";
     if(tmp.empty()){
         return str;
     }
@@ -119,6 +124,24 @@ string bFirst::qtos(queue<int> q){
         while(!tmp.empty()){
             str += " -> ";
             str += to_string(tmp.front());
+            tmp.pop();
+        }
+    }
+    return str;
+}
+
+string bFirst::qtos(queue<queue<int>> q){
+    queue<queue<int>> tmp = q;
+    string str = "Empty";
+    if(tmp.empty()){
+        return str;
+    }
+    else{
+        str = to_string(tmp.front().back());
+        tmp.pop();
+        while(!tmp.empty()){
+            str += " ";
+            str += to_string(tmp.front().back());
             tmp.pop();
         }
     }
