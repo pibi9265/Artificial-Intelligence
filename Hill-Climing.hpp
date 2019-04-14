@@ -8,21 +8,21 @@ using namespace std;
 
 class hClim{
     private:
-        int arrSize;
-        int **arr;
-        int start;
-        int end;
-        int *hArr;
-        queue<int> pathTmp;
-        queue<int> path;
-        bool reVisit(int n);
-        int cost(queue<int> q);
-        string qtos(queue<int> q);
-        string ntoc(int n); //debug
+        int arrSize; //탐색할 도시의 갯수
+        int **arr; //각 도시간의 cost을 저장한 int형 2중배열
+        int start; //시작점
+        int end; //도착점
+        int *hArr; //각 도시의 직선거리를 저장한 int형 배열
+        queue<int> pathTmp; //searching()도중에 생기는 path를 임시로 저장할 큐
+        queue<int> path; //찾아낸 path를 저장할 큐
+        bool reVisit(int n); //인자로 받은 도시가 과거에 방문했던 도시인지 검사 (재방문일 경우 true값 return)
+        int cost(queue<int> q); //인자로 받은 Path(큐)의 총 Cost를 return
+        string qtos(queue<int> q); //인자로 받은 Path(큐)를 String형으로 변환해서 return
+        string ntoc(int n); //debug //0부터 19까지의 int형 값을 알맞은 도시의 이름(string)으로 변환해서 return
     public:
         hClim(int arrSize, int **arr, int start, int end, int *hArr);
         ~hClim();
-        bool searching();
+        bool searching(); //Hill-Climing 알고리즘에 따라 극값에 해당하는 path를 찾는 함수 (path에 값을 입력, Local Maximum일 경우 false값 return)
 };
 
 hClim::hClim(int arrSize, int **arr, int start, int end, int *hArr){

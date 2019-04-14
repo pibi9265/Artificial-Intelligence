@@ -8,25 +8,25 @@ using namespace std;
 
 class bFirst{
     private:
-        int arrSize;
-        int **arr;
-        int start;
-        int end;
-        int *hArr;
-        queue<queue<int>> open;
-        queue<queue<int>> closed;
-        queue<int> path;
-        bool reVisit(int n);
-        int cost(queue<int> q);
-        string qtos(queue<int> q);
-        string qtos(queue<queue<int>> q);
-        queue<int> bestOpen();
-        void popOpen(queue<int> q);
-        string ntoc(int n); //debug
+        int arrSize; //탐색할 도시의 갯수
+        int **arr; //각 도시간의 cost을 저장한 int형 2중배열
+        int start; //시작점
+        int end; //도착점
+        int *hArr; //각 도시의 직선거리를 저장한 int형 배열
+        queue<queue<int>> open; //다음 방문할 자식 노드를 저장할 큐
+        queue<queue<int>> closed; //방문한 노드를 저장할 큐
+        queue<int> path; //찾아낸 path를 저장할 큐
+        bool reVisit(int n); //인자로 받은 도시가 과거에 방문했던 도시인지 검사 (재방문일 경우 true값 return)
+        int cost(queue<int> q); //인자로 받은 Path(큐)의 총 Cost를 return
+        string qtos(queue<int> q); //인자로 받은 Path(큐)를 String형으로 변환해서 return
+        string qtos(queue<queue<int>> q); //인자로 받은 Path(큐)를 String형으로 변환해서 return
+        queue<int> bestOpen(); //open큐에서 Heuristic값이 가장 최적인 path를 찾아내 return
+        void popOpen(queue<int> q); //open큐에 인자로 받은 path가 있을경우 해당 path를 open큐에서 제거
+        string ntoc(int n); //debug //0부터 19까지의 int형 값을 알맞은 도시의 이름(string)으로 변환해서 return
     public:
         bFirst(int arrSize, int **arr, int start, int end, int *hArr);
         ~bFirst();
-        bool searching();
+        bool searching(); //Best-First 알고리즘에 따라 path를 찾는 함수 (path에 값을 입력)
 };
 
 bFirst::bFirst(int arrSize, int **arr, int start, int end, int *hArr){

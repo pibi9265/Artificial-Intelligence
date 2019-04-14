@@ -9,26 +9,26 @@ using namespace std;
 
 class dfSearch{
     private:
-        int arrSize;
-        int **arr;
-        int start;
-        int end;
-        stack<queue<int>> open;
-        queue<queue<int>> closed;
-        queue<queue<int>> path;
-        queue<int> sPath;
-        bool reVisit(int n);
-        int cost(queue<int> q);
-        string qtos(queue<int> q);
-        string qtos(queue<queue<int>> q);
-        string stos(stack<queue<int>> s);
-        bool findSP();
-        string ntoc(int n); //debug
+        int arrSize; //탐색할 도시의 갯수
+        int **arr; //각 도시간의 cost을 저장한 int형 2중배열
+        int start; //시작점
+        int end; //도착점
+        stack<queue<int>> open; //다음 방문할 자식 노드를 저장할 스택
+        queue<queue<int>> closed; //방문한 노드를 저장할 큐
+        queue<queue<int>> path; //찾아낸 모든 path를 저장할 큐
+        queue<int> sPath; //Shortest Path를 저장할 큐
+        bool reVisit(int n); //인자로 받은 도시가 과거에 방문했던 도시인지 검사 (재방문일 경우 true값 return)
+        int cost(queue<int> q); //인자로 받은 Path(큐)의 총 Cost를 return
+        string qtos(queue<int> q); //인자로 받은 Path(큐)를 String형으로 변환해서 return
+        string qtos(queue<queue<int>> q); //인자로 받은 Path(큐)를 String형으로 변환해서 return
+        string stos(stack<queue<int>> s); //인자로 받은 Path(스택)을 String형으로 변환해서 return
+        bool findSP(); //변수 path에서 Shortest Path를 찾아내어 sPath변수에 값을 입력함 (path가 비어있을경우 false값 return)
+        string ntoc(int n); //debug //0부터 19까지의 int형 값을 알맞은 도시의 이름(string)으로 변환해서 return
     public:
         dfSearch(int arrSize, int **arr, int start, int end);
         ~dfSearch();
-        bool searching();
-        bool searchingSP();
+        bool searching(); //첫번째 path를 찾을때까지 탐색하는 함수 (path에 값을 입력)
+        bool searchingSP(); //모든 트리를 탐색하여 Shortest Path를 찾는 함수 (path, sPath에 값을 입력)
 };
 
 dfSearch::dfSearch(int arrSize, int **arr, int start, int end){

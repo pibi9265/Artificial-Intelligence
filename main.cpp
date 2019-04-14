@@ -7,6 +7,32 @@ using namespace std;
 #include "Hill-Climing.hpp"
 #include "Best-First_Search.hpp"
 
+/*사용한 변수 List
+    arrSize: 탐색할 도시의 갯수
+    arr: 각 도시간의 cost을 저장한 int형 2중배열
+    start: 시작점
+    end: 도착지점
+    hArr: 각 도시에서 목적지까지의 직선 거리를 저장한 int형 배열
+*/
+
+/*각 클래스 설명
+    Breadth-First Search
+    bfSearch(도시갯수(int형), 도시간의 cost(int형2중배열 포인터), 시작점(int형), 목적지(int형))
+    bfSearch::searchingSP() 모든 트리를 너비 우선 탐색하여 Shortest Path를 찾아 과정과 결과 출력
+
+    Depth-First Search
+    dfSearch(도시갯수(int형), 도시간의 cost(int형2중배열 포인터), 시작점(int형), 목적지(int형))
+    dfSearch::searchingSP() 모든 트리를 깊이 우선 탐색하여 Shortest Path를 찾아 과정과 결과 출력
+
+    Hill-Climing
+    hClim(도시갯수(int형), 도시간의cost(int형2중배열 포인터), 시작점(int형), 목적지(int형), 도시의직선거리(int형배열포인터))
+    hClim::searching() Hill-Climing 알고리즘에 따라 극값에 해당하는 path를 찾아 과정과 결과 출력 (Local Maximum일 경우 false값 return)
+
+    Best-First Search
+    bFirst(도시갯수(int형), 도시간의cost(int형2중배열 포인터), 시작점(int형), 목적지(int형), 도시의직선거리(int형배열포인터))
+    bFirst::searching() Best-First 알고리즘에 따라 path를 찾아 과정과 결과 출력
+*/
+
 int main(){
     int arrSize = 20;
 
